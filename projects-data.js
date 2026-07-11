@@ -1,63 +1,82 @@
 const PROJECTS = [
-  {
-    slug: "studybot",
-    title: "StudyBot — AI Study Assistant",
-    tags: ["Python", "FastAPI", "LangChain", "Qdrant", "Gemini API", "Next.js"],
-    overview: "A full-stack RAG-powered study assistant that remembers how a student has struggled in past sessions and adapts its explanations accordingly, instead of treating every question as a blank slate.",
-    problem: "Most study tools answer a question and forget the conversation ever happened — they don't notice when a student keeps stumbling on the same concept, and they don't turn that into a plan.",
-    features: {
-      intro: "A chat-driven assistant where every response is grounded in the student's own history, built around a few key pieces:",
-      bullets: [
-        { label: "Semantic memory.", detail: "Retrieval over past conversations to detect recurring struggle patterns and tailor explanations, using LangChain and a Qdrant vector index." },
-        { label: "Real-time streaming.", detail: "Responses streamed token-by-token over SSE instead of waiting for a full reply." },
-        { label: "Storage architecture.", detail: "FastAPI backend with dual storage — SQLite for structured data, Qdrant for vector search — hitting sub-500ms retrieval." },
-        { label: "Study planning.", detail: "A Gemini-powered planner turns a topic into a structured 4–6 week study plan with 15–20 concrete, trackable tasks." },
-        { label: "Progress tracking.", detail: "Each task links directly back into the chat, so a student can jump from 'what should I study' to 'explain this' without leaving the flow." }
-      ]
-    },
-    results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
-    resultsPlaceholder: true,
-    github: "#",
-    placeholder: false
+{
+  slug: "studybot",
+  title: "StudyBot — AI Study Assistant",
+  tags: ["Python", "FastAPI", "LangChain", "Qdrant", "Gemini API", "Next.js"],
+  overview: "A full-stack RAG-powered study assistant that remembers how a student has struggled across sessions, adapts explanations to their level, and evolves their study plan automatically instead of treating every question as a blank slate.",
+  problem: "Most study tools answer a question and forget the conversation ever happened. They don't notice when a student keeps stumbling on the same concept, can't adjust a plan when someone falls behind, and have no way to connect what you're asking today to what confused you last week.",
+  features: {
+    intro: "A chat-driven assistant where every response is grounded in the student's own history, built around a few key pieces:",
+    bullets: [
+      {
+        label: "Semantic memory.",
+        detail: "Retrieves top-3 semantically similar past conversations per query using LangChain and a Qdrant vector index, detecting recurring struggle patterns and tailoring explanations without the student having to re-explain context."
+      },
+      {
+        label: "Agentic task control.",
+        detail: "Students can update their study plan directly through chat saying 'mark arrays as done' triggers intent detection, surfaces a confirmation pill, and updates the database on confirmation. No manual clicking required."
+      },
+      {
+        label: "Adaptive study plan.",
+        detail: "Gemini generates a structured 4–6 week plan with 15–20 concrete tasks. If a student struggles with a concept or runs out of time, the plan auto-adjusts inserting remedial content or compressing weeks with a preview before any changes are saved."
+      },
+      {
+        label: "Concept connections.",
+        detail: "When retrieved context surfaces a related past question, the bot explicitly connects it 'this is similar to what you asked about two pointers last week' building a web of understanding rather than isolated answers."
+      },
+      {
+        label: "Real-time streaming.",
+        detail: "Responses streamed token-by-token over SSE with a visible 'searching your study history' indicator while retrieval runs making the memory layer a visible feature, not a hidden implementation detail."
+      },
+      {
+        label: "Storage architecture.",
+        detail: "FastAPI backend with dual storage SQLite for structured chat history and plan data, Qdrant for vector search with a 3-model LLM fallback chain and sub-500ms end-to-end retrieval latency."
+      }
+    ]
   },
-  {
+  results: "Built as a personal project to explore production RAG patterns. Covers the full AI engineering stack from vector indexing and streaming APIs to agentic tool use and adaptive planning in a single cohesive product rather than isolated demos.",
+  resultsPlaceholder: false,
+  github: "https://github.com/yashvivaghela/StudyBot",
+  placeholder: false
+},
+{
     slug: "meeting-assistant",
     title: "Meeting Assistant — Real-Time Speech Suggestions",
     tags: ["FastAPI", "Groq API", "Speech-to-Text", "LLM"],
-    overview: "A side project that listens in on a live meeting and quietly suggests what you could say next, built to test how fast a speech-to-LLM loop can run and still feel usable in real time.",
-    problem: "In the middle of a live meeting there's no time to pause and think through the sharpest way to respond — by the time a good reply comes to mind, the conversation has moved on.",
+    overview: "A web app that listens to live audio from your mic and continuously surfaces context-aware suggestions questions to ask, talking points, answers, or fact-checks so you always have something useful to say next.",
+    problem: "In the middle of a live conversation there's no time to pause and think through the sharpest way to respond by the time a good reply comes to mind, the conversation has moved on.",
     features: {
-      intro: "A FastAPI pipeline built to turn live audio into usable suggestions fast enough for mid-conversation use:",
+      intro: "A three-column FastAPI app that turns a live mic feed into structured, actionable suggestions in near real time:",
       bullets: [
-        { label: "Audio capture.", detail: "Live audio captured and piped through speech-to-text in real time." },
-        { label: "LLM suggestions.", detail: "Transcripts sent straight to an LLM through the Groq API to generate real-time response suggestions." },
-        { label: "Lightweight frontend.", detail: "A simple HTML/CSS interface built for glanceable, in-the-moment suggestions rather than a full transcript view." },
-        { label: "Low latency.", detail: "The full pipeline — audio in, suggestion out — was built to stay fast enough to be useful mid-conversation, not as a post-meeting summary tool." }
+        { label: "Live transcript.", detail: "Start/stop mic capture streams audio through speech-to-text, appending new transcript chunks roughly every 30 seconds and auto-scrolling to the latest line." },
+        { label: "Context-aware suggestions.", detail: "Every ~30 seconds (or on manual refresh), the recent transcript is sent to an LLM via the Groq API, which returns exactly 3 fresh suggestions a mix of questions to ask, talking points, direct answers, or fact-checks, chosen based on what's actually being discussed. New batches stack above older ones so nothing gets lost." },
+        { label: "Tappable suggestion cards.", detail: "Each suggestion shows a short, useful preview on its own tapping it pulls in full transcript context and returns a longer, more detailed answer in the chat panel." },
+        { label: "Session export.", detail: "A single export captures the full transcript, every suggestion batch, and the complete chat history with timestamps for later review." }
       ]
     },
     results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
-    github: "#",
+    github: "https://github.com/yashvivaghela/TwinMind_LiveSuggestions",
     placeholder: false
   },
-  {
+{
     slug: "stock-search",
     title: "Stock Search Website",
-    tags: ["Angular", "Node.js", "MongoDB", "GCP"],
-    overview: "A stock search web application built with Angular and Node.js, integrating the Finnhub and Polygon APIs to display real-time market data for 50+ stocks.",
-    problem: "Checking live stock prices and simulating trades usually means juggling multiple sites — there was no single, fast place to search a ticker and act on it.",
+    tags: ["Angular", "TypeScript", "Node.js", "MongoDB", "GCP"],
+    overview: "A stock search platform where users pull up any ticker and get a full picture live pricing, news, charts, and company insights while also being able to simulate trades and track favorites in a personal watchlist.",
+    problem: "Checking live stock prices and simulating trades usually means juggling multiple sites there was no single, fast place to search a ticker and act on it.",
     features: {
-      intro: "A search-first web app where users look up any of 50+ stocks and act on live data, built around a few key pieces:",
+      intro: "A search-first experience backed by Angular and a Node/Express API, built around a few core flows:",
       bullets: [
-        { label: "Live market data.", detail: "Real-time pricing for 50+ stocks pulled from the Finnhub and Polygon APIs." },
-        { label: "Trade simulation.", detail: "Buy/sell trade simulation with persistent watchlists." },
-        { label: "Deployment & storage.", detail: "User data stored in MongoDB, backend deployed on Google App Engine." },
-        { label: "Caching layer.", detail: "Added for frequently requested tickers to cut redundant API calls." }
+        { label: "Search & company view.", detail: "Ticker search with live autocomplete via the Finnhub API, opening into a company page with live price, market status, and tabs for Summary, Top News, Charts, and Insights including interactive historical charts across 1-month to 1-year ranges with zoom and scroll." },
+        { label: "Simulated trading.", detail: "Users can buy and sell at real-time prices, with a confirmation banner and instant portfolio update on every transaction." },
+        { label: "Watchlist & portfolio.", detail: "A one-tap star toggle adds or removes stocks from a personal watchlist, while the portfolio view shows real-time price, cost basis, market value, and gain/loss for every holding, with the option to sell directly from that screen." },
+        { label: "Deployment & storage.", detail: "User and portfolio data persisted in MongoDB, with the backend deployed on Google App Engine." }
       ]
     },
-    results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
-    resultsPlaceholder: true,
-    github: "#",
+    results: "Cached responses for frequently searched tickers, which noticeably cut load times on repeat lookups and reduced redundant calls to the Finnhub and Polygon APIs.",
+    resultsPlaceholder: false,
+    github: "https://github.com/yashvivaghela/StockSearchWebsite",
     placeholder: false
   },
   {
@@ -80,44 +99,44 @@ const PROJECTS = [
     github: "#",
     placeholder: false
   },
-  {
+{
     slug: "interview-feedback-assistant",
     title: "Interview Feedback Assistant",
-    tags: ["Python", "Flask", "spaCy", "Machine Learning"],
-    overview: "A mock-interview platform that records a candidate's response and turns it into structured, actionable feedback instead of just a pass/fail impression.",
-    problem: "Practicing interviews alone means you have no way to know how you actually came across — whether your delivery, expressions, or word choice would raise a flag with a real interviewer.",
+    tags: ["Python", "Flask", "spaCy", "FER", "Librosa", "Machine Learning"],
+    overview: "A mock-interview platform that pulls a random question, records a candidate's response, and turns it into structured feedback on delivery, tone, and word choice instead of just a pass/fail impression.",
+    problem: "Practicing interviews alone means you have no way to know how you actually came across — whether your delivery, tone, or word choice would raise a flag with a real interviewer.",
     features: {
-      intro: "A Flask app built around ML-driven feedback on how a response actually comes across:",
+      intro: "A Flask app that runs a recorded response through several ML models to score how it actually landed:",
       bullets: [
-        { label: "Delivery feedback.", detail: "ML analysis of speaking style and facial expression from recorded responses." },
-        { label: "Language flagging.", detail: "spaCy's matcher scans responses in real time for words or phrases that shouldn't come up in an interview." },
-        { label: "Resume matching.", detail: "Resume-to-job-description similarity scoring computed with cosine similarity." },
-        { label: "End-to-end flow.", detail: "From recording a response to receiving structured feedback, all in the browser." }
+        { label: "Expression scoring.", detail: "Facial Expression Recognition (FER) scores each detected emotion frame-by-frame and surfaces the dominant expression across the response." },
+        { label: "Tone analysis.", detail: "Vocal tone is analyzed with librosa for audio feature extraction, then classified into speech emotions using an MLP classifier." },
+        { label: "Language flagging.", detail: "The response is transcribed from speech to text, run through NLP preprocessing, and checked against a curated word list with spaCy's matcher to flag phrasing that shouldn't come up in an interview." },
+        { label: "Relevance check.", detail: "Keyword matching specific to each question determines whether the candidate's answer actually stayed on-topic." },
+        { label: "Resume matching.", detail: "A separate tool scores resume-to-job-description similarity using cosine similarity." }
       ]
     },
     results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
-    github: "#",
+    github: "https://github.com/yashvivaghela/MockwithUs",
     placeholder: false
   },
-  {
+{
     slug: "signsync",
     title: "SignSync — ASL Detection",
     tags: ["Flask", "TensorFlow", "OpenCV", "Computer Vision"],
-    overview: "A web app that reads American Sign Language from a camera feed and converts it to text in real time, aimed at making everyday communication easier for people who are deaf or speech-impaired.",
-    problem: "Real-time communication between ASL signers and non-signers usually depends on a human interpreter being available — there's no lightweight, always-on option for quick, everyday exchanges.",
+    overview: "A web app that detects American Sign Language from a live camera feed and converts it to text, aimed at making everyday communication easier for people with speech disabilities.",
+    problem: "Real-time communication between ASL signers and non-signers usually depends on a human interpreter being available there's no lightweight, always-on option for quick, everyday exchanges.",
     features: {
-      intro: "A Flask app built to make ASL communication real-time and accessible:",
+      intro: "A Flask app combining hand detection and sign classification to turn ASL into text in real time:",
       bullets: [
-        { label: "Real-time detection.", detail: "ASL sign recognition from live camera input using TensorFlow's Object Detection API." },
-        { label: "Live translation.", detail: "Detected signs converted into readable text on screen as they happen." },
-        { label: "Bonus tool.", detail: "A photo upload tool where users can click anywhere on an image to read out the RGB value at that point." },
-        { label: "Accessibility-first design.", detail: "Built with accessibility as the core use case, not an add-on feature." }
+        { label: "Sign detection.", detail: "OpenCV isolates and tracks the signer's hand from the live camera feed, then TensorFlow's Object Detection API classifies the hand shape as an ASL sign." },
+        { label: "Live translation.", detail: "Recognized signs are converted into readable text on screen as they happen." },
+        { label: "Bonus tool.", detail: "A photo upload feature lets users click anywhere on an image to read out the RGB value at that point." }
       ]
     },
     results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
-    github: "#",
+    github: "https://github.com/yashvivaghela/SignSync",
     placeholder: false
   }
 ];
