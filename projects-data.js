@@ -3,11 +3,15 @@ const PROJECTS = [
   slug: "studybot",
   title: "StudyBot — AI Study Assistant",
   tags: ["Python", "FastAPI", "LangChain", "Qdrant", "Gemini API", "Next.js"],
-  overview: "A full-stack RAG-powered study assistant that remembers how a student has struggled across sessions, adapts explanations to their level, and evolves their study plan automatically instead of treating every question as a blank slate.",
+  overview: "A full-stack RAG-powered study assistant where students can create structured study plans, chat with an AI tutor that remembers their conversation history within each topic. The AI retrieves past questions and struggles to give personalized, context-aware explanations, surfaces concept connections across sessions, and lets students evolve their plan through natural conversation when their goals or timeline change.",
   problem: "Most study tools answer a question and forget the conversation ever happened. They don't notice when a student keeps stumbling on the same concept, can't adjust a plan when someone falls behind, and have no way to connect what you're asking today to what confused you last week.",
   features: {
     intro: "A chat-driven assistant where every response is grounded in the student's own history, built around a few key pieces:",
     bullets: [
+      {
+        label: "Core chat interface.",
+        detail: "A conversational assistant students can ask anything in — StudyBot answers questions, explains concepts, and generates full study plans on request, all from the same chat window."
+      },
       {
         label: "Semantic memory.",
         detail: "Retrieves top-3 semantically similar past conversations per query using LangChain and a Qdrant vector index, detecting recurring struggle patterns and tailoring explanations without the student having to re-explain context."
@@ -19,10 +23,6 @@ const PROJECTS = [
       {
         label: "Adaptive study plan.",
         detail: "Gemini generates a structured 4–6 week plan with 15–20 concrete tasks. If a student struggles with a concept or runs out of time, the plan auto-adjusts inserting remedial content or compressing weeks with a preview before any changes are saved."
-      },
-      {
-        label: "Concept connections.",
-        detail: "When retrieved context surfaces a related past question, the bot explicitly connects it 'this is similar to what you asked about two pointers last week' building a web of understanding rather than isolated answers."
       },
       {
         label: "Real-time streaming.",
