@@ -1,7 +1,7 @@
 const PROJECTS = [
 {
   slug: "studybot",
-  title: "StudyBot — AI Study Assistant",
+  title: "StudyBot - AI Study Assistant",
   tags: ["Python", "FastAPI", "LangChain", "Qdrant", "Gemini API", "Next.js"],
   overview: "A full-stack RAG-powered study assistant where students can create structured study plans, chat with an AI tutor that remembers their conversation history within each topic. The AI retrieves past questions and struggles to give personalized, context-aware explanations, surfaces concept connections across sessions, and lets students evolve their plan through natural conversation when their goals or timeline change.",
   problem: "Most study tools answer a question and forget the conversation ever happened. They don't notice when a student keeps stumbling on the same concept, can't adjust a plan when someone falls behind, and have no way to connect what you're asking today to what confused you last week.",
@@ -10,7 +10,7 @@ const PROJECTS = [
     bullets: [
       {
         label: "Core chat interface.",
-        detail: "A conversational assistant students can ask anything in — StudyBot answers questions, explains concepts, and generates full study plans on request, all from the same chat window."
+        detail: "A conversational assistant students can ask anything in - StudyBot answers questions, explains concepts, and generates full study plans on request, all from the same chat window."
       },
       {
         label: "Semantic memory.",
@@ -37,7 +37,8 @@ const PROJECTS = [
   results: "Built as a personal project to explore production RAG patterns. Covers the full AI engineering stack from vector indexing and streaming APIs to agentic tool use and adaptive planning in a single cohesive product rather than isolated demos.",
   resultsPlaceholder: false,
   github: "https://github.com/yashvivaghela/StudyBot",
-  placeholder: false
+  placeholder: false,
+  demo: "https://www.loom.com/share/2aedb1c2b71a433da62e401c092b8952"
 },
 {
     slug: "meeting-assistant",
@@ -115,7 +116,7 @@ const PROJECTS = [
         { label: "Resume matching.", detail: "A separate tool scores resume-to-job-description similarity using cosine similarity." }
       ]
     },
-    results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
+    results: "Add impact metrics or outcomes here - e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
     github: "https://github.com/yashvivaghela/MockwithUs",
     placeholder: false
@@ -134,7 +135,7 @@ const PROJECTS = [
         { label: "Bonus tool.", detail: "A photo upload feature lets users click anywhere on an image to read out the RGB value at that point." }
       ]
     },
-    results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
+    results: "Add impact metrics or outcomes here - e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
     github: "https://github.com/yashvivaghela/SignSync",
     placeholder: false
