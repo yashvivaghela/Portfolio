@@ -38,7 +38,7 @@ const PROJECTS = [
   resultsPlaceholder: false,
   github: "https://github.com/yashvivaghela/StudyBot",
   placeholder: false,
-  demo: "https://www.loom.com/share/2aedb1c2b71a433da62e401c092b8952"
+  demo: "https://www.loom.com/share/768834cef5924e378e3a347d2a54bc46"
 },
 {
     slug: "meeting-assistant",
