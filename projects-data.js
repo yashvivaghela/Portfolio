@@ -41,6 +41,47 @@ const PROJECTS = [
   demo: "https://www.loom.com/share/768834cef5924e378e3a347d2a54bc46"
 },
 {
+  slug: "resume-tailor-agent",
+  title: "Multi-Agent Resume Tailoring System",
+  tags: ["Python", "Streamlit", "Groq", "python-docx", "Pydantic", "Multi-Agent"],
+  overview: "A multi-agent system that tailors a resume to a specific job description by rewriting bullet points section by section - but every rewritten claim has to be independently fact-checked against the user's real project data before it's allowed into the final resume, not just generated and trusted.",
+  problem: "Asking an LLM to 'tailor my resume' usually means it quietly invents experience to better match the job description - a stronger metric here, a technology there, none of it real. Most tools have no step that actually checks whether a rewritten bullet is still true to what the person did.",
+  features: {
+    intro: "A three-agent pipeline where no single agent both writes and grades its own work, built around a few key pieces:",
+    bullets: [
+      {
+        label: "Planning.",
+        detail: "Matches each resume section to the past project or experience entry that best targets the job description's requirements, deciding whether to re-tailor the existing entry or replace it outright."
+      },
+      {
+        label: "Drafting.",
+        detail: "Writes new bullet points for that section using only the matched project's real data as source material - descriptions, skills, and stated metrics - with no outside invention allowed."
+      },
+      {
+        label: "Independent grounding critic.",
+        detail: "A separate agent fact-checks every drafted bullet against the source project description, classifying it as verified, overstated, unsupported, or fabricated - run independently of the agent that wrote the bullet, so nothing grades its own work."
+      },
+      {
+        label: "Revision loop.",
+        detail: "Any bullet the critic rejects goes through an automated critique-and-redraft cycle guided by the critic's specific suggested fix, not a blind retry - capped after a few attempts, with a safe fallback bullet built only from verified metadata if nothing ever passes."
+      },
+      {
+        label: "Fit evaluation.",
+        detail: "A separate scoring agent judges the finished resume as a whole against the job description once every section is done, surfacing an overall fit score plus the gaps the pipeline honestly couldn't address."
+      },
+      {
+        label: "Style-matching docx output.",
+        detail: "Detects the uploaded resume's own formatting conventions - inline bold usage, title-line style - per resume, and reproduces them in the tailored output rather than imposing a fixed template."
+      }
+    ]
+  },
+  results: "Validated with a controlled ablation study: the same pipeline run across identical job-description test cases with the grounding critic on vs. off. With it off, only 34.5% of bullets held up against the real project data. With it on, 100% did - a 65.5-percentage-point drop in fabricated and unsupported claims, confirming the critic, not the LLM's own judgment, is what keeps the output honest.",
+  resultsPlaceholder: false,
+  github: "https://github.com/yashvivaghela/resume-tailor-agent.git",
+  placeholder: true,
+  demo: ""
+},
+{
     slug: "meeting-assistant",
     title: "Meeting Assistant — Real-Time Speech Suggestions",
     tags: ["FastAPI", "Groq API", "Speech-to-Text", "LLM"],
