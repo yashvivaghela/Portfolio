@@ -1,4 +1,43 @@
 const PROJECTS = [
+  {
+  slug: "rateshield",
+  title: "RateShield",
+  tags: ["TypeScript", "AWS Lambda", "API Gateway", "DynamoDB", "CloudWatch", "CDK", "k6"],
+  overview: "A serverless API rate-limiting and usage-metering service that enforces per-client request quotas with a token-bucket algorithm but the real problem it's built around is making that enforcement correct when many requests for the same client arrive at the exact same instant.",
+  problem: "A naive rate limiter reads a client's remaining tokens, checks the count in code, then writes the updated value back - three separate steps with a gap between them. Under concurrent traffic, multiple requests can all read the same token count before any of them writes, each thinks it's allowed, and the limit gets silently violated. Most rate-limiter write-ups skip past this; RateShield is built around proving it doesn't happen.",
+  features: {
+    intro: "",
+    bullets: [
+      {
+        label: "Atomic token-bucket enforcement.",
+        detail: "Reads a client's bucket, computes a lazy refill from elapsed time, then writes the result back with a DynamoDB conditional write that only commits if nothing changed since the read - serializing concurrent requests against the same bucket instead of letting them race."
+      },
+      {
+        label: "Hot-partition-resistant sharding.",
+        detail: "Splits a single high-traffic client's bucket across multiple DynamoDB partition keys, with each request routed to a random shard, trading a small amount of enforcement precision for genuine load distribution across physical partitions - a deliberate, documented tradeoff rather than a perfect guarantee."
+      },
+      {
+        label: "Per-tier quota resolution.",
+        detail: "Looks up each API key's plan (free, pro, enterprise) from a separate config table and applies that tier's own capacity and refill rate, with unrecognized keys denied by default - cached per warm Lambda container to cut a DynamoDB round-trip off the common path."
+      },
+      {
+        label: "Fail-open circuit breaker.",
+        detail: "Tracks DynamoDB errors in a rolling window and trips to an unenforced fail-open state rather than rejecting all traffic when the dependency is struggling, with a global API Gateway throttle as an independent backstop for the window where per-client enforcement is down."
+      },
+      {
+        label: "Usage metering.",
+        detail: "Increments an hourly per-key request counter using DynamoDB's native atomic ADD operation, written fire-and-forget so a metering hiccup can never affect the authorization decision itself."
+      }
+    ]
+  },
+  results: "Verified with k6 under genuine concurrent load, not just sequential requests: 15 simultaneous requests against a single bucket allowed exactly the configured capacity and denied the rest, with zero over-allowance, across repeated runs. A sustained load test ramping to 50 concurrent users across all three tiers found a real bottleneck - a per-request DynamoDB lookup - and fixing it with per-container caching and a Lambda memory tune lifted sustained throughput 63% (198 to 322 req/sec) and cut P99 latency 40% (409ms to 244ms), with zero errors in either run.",
+  resultsPlaceholder: false,
+  github: "https://github.com/yashvivaghela/RateShield",
+  placeholder: true,
+  demo: "",
+  iconColor: "#e3b23c",
+iconPath: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+},
 {
   slug: "studybot",
   title: "StudyBot - AI Study Assistant",
@@ -38,7 +77,9 @@ const PROJECTS = [
   resultsPlaceholder: false,
   github: "https://github.com/yashvivaghela/StudyBot",
   placeholder: false,
-  demo: "https://www.loom.com/share/768834cef5924e378e3a347d2a54bc46"
+  demo: "https://www.loom.com/share/768834cef5924e378e3a347d2a54bc46",
+  iconColor: "#7f77dd",
+iconPath: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
 },
 {
   slug: "resume-tailor-agent",
@@ -79,11 +120,13 @@ const PROJECTS = [
   resultsPlaceholder: false,
   github: "https://github.com/yashvivaghela/resume-tailor-agent.git",
   placeholder: true,
-  demo: ""
+  demo: "",
+  iconColor: "#d4537e",
+iconPath: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
 },
 {
     slug: "meeting-assistant",
-    title: "Meeting Assistant — Real-Time Speech Suggestions",
+    title: "Meeting Assistant - Real-Time Speech Suggestions",
     tags: ["FastAPI", "Groq API", "Speech-to-Text", "LLM"],
     overview: "A web app that listens to live audio from your mic and continuously surfaces context-aware suggestions questions to ask, talking points, answers, or fact-checks so you always have something useful to say next.",
     problem: "In the middle of a live conversation there's no time to pause and think through the sharpest way to respond by the time a good reply comes to mind, the conversation has moved on.",
@@ -99,7 +142,9 @@ const PROJECTS = [
     results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
     github: "https://github.com/yashvivaghela/TwinMind_LiveSuggestions",
-    placeholder: false
+    placeholder: false,
+    iconColor: "#7f77dd",
+iconPath: '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>',
   },
 {
     slug: "stock-search",
@@ -119,11 +164,13 @@ const PROJECTS = [
     results: "Cached responses for frequently searched tickers, which noticeably cut load times on repeat lookups and reduced redundant calls to the Finnhub and Polygon APIs.",
     resultsPlaceholder: false,
     github: "https://github.com/yashvivaghela/StockSearchWebsite",
-    placeholder: false
+    placeholder: false,
+    iconColor: "#378add",
+iconPath: '<polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/>',
   },
   {
     slug: "image-caption-generator",
-    title: "Image Caption Generator — Model Benchmarking",
+    title: "Image Caption Generator - Model Benchmarking",
     tags: ["Python", "TensorFlow", "Hugging Face", "Computer Vision"],
     overview: "A systematic benchmark of 9 image captioning architectures, comparing older encoder-decoder approaches against modern transformer-based models to see how much captioning quality actually varies in practice.",
     problem: "There's no shortage of image captioning models, but picking one usually means trusting a paper's reported numbers rather than testing them side by side on the same data.",
@@ -139,7 +186,9 @@ const PROJECTS = [
     results: "Add impact metrics or outcomes here — e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
     github: "#",
-    placeholder: false
+    placeholder: false,
+    iconColor: "#1d9e75",
+iconPath: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
   },
 {
     slug: "interview-feedback-assistant",
@@ -160,11 +209,13 @@ const PROJECTS = [
     results: "Add impact metrics or outcomes here - e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
     github: "https://github.com/yashvivaghela/MockwithUs",
-    placeholder: false
+    placeholder: false,
+    iconColor: "#d85a30",
+iconPath: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
   },
 {
     slug: "signsync",
-    title: "SignSync — ASL Detection",
+    title: "SignSync - ASL Detection",
     tags: ["Flask", "TensorFlow", "OpenCV", "Computer Vision"],
     overview: "A web app that detects American Sign Language from a live camera feed and converts it to text, aimed at making everyday communication easier for people with speech disabilities.",
     problem: "Real-time communication between ASL signers and non-signers usually depends on a human interpreter being available there's no lightweight, always-on option for quick, everyday exchanges.",
@@ -179,6 +230,8 @@ const PROJECTS = [
     results: "Add impact metrics or outcomes here - e.g. usage numbers, performance improvements, or what you learned.",
     resultsPlaceholder: true,
     github: "https://github.com/yashvivaghela/SignSync",
-    placeholder: false
+    placeholder: false,
+    iconColor: "#1d9e75",
+iconPath: '<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/>',
   }
 ];
